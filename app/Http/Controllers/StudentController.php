@@ -7,21 +7,24 @@ use App\Models\Student;
 
 class StudentController extends Controller
 {
-    // ✅ This method was missing
+    // ✅ Correct place to put middleware
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $students = Student::all();
         return view('student', compact('students'));
     }
 
-    // Show the create student form (not currently used separately)
     public function create()
     {
         $students = Student::all();
         return view('student', compact('students'));
     }
 
-    // Handle form submission and save to database
     public function store(Request $request)
     {
         $request->validate([
