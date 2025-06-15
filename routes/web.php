@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\StudentController;
+
+use App\Models\Post;
+
 Route::get('/', function () {
-    return view('welcome');
+    $posts = Post::all();
+    return view('welcome', compact('posts'));
 });
