@@ -4,9 +4,5 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\StudentController;
 
-use App\Models\Post;
-
-Route::get('/', function () {
-    $posts = Post::all();
-    return view('welcome', compact('posts'));
-});
+Route::get('/students', [StudentController::class, 'create'])->name('student.create');
+Route::post('/students', [StudentController::class, 'store'])->name('student.store');
