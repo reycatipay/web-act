@@ -17,7 +17,13 @@ class AuthController extends Controller
     // Show login form
     public function showLoginForm()
     {
-        return view('auth.login'); // Make sure this Blade file exists
+        return view('auth.login'); // Or your combined login/register view
+    }
+
+    // Show register form
+    public function showRegisterForm()
+    {
+        return view('auth.register'); // Or your combined login/register view
     }
 
     // Handle login
@@ -30,12 +36,33 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate(); // Prevent session fixation
-            return redirect()->intended(route('student.index')); // or home page
+            return redirect()->intended(route('student.index'));
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    // Handle register
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'confirmed', 'min:6'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('student.index');
     }
 
     // Handle logout
@@ -44,7 +71,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('login');
     }
 }

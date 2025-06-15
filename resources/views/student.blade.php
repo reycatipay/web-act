@@ -26,6 +26,11 @@
             align-items: center;
         }
 
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
         h2 {
             color: #333;
         }
@@ -42,6 +47,20 @@
 
         .add-button:hover {
             background-color: #45a049;
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
         }
 
         table {
@@ -197,7 +216,13 @@
 <div class="container">
     <div class="header">
         <h2>Student List</h2>
-        <button class="add-button" onclick="openModal()">+ Add Student</button>
+        <div class="header-buttons">
+            <button class="add-button" onclick="openModal()">+ Add Student</button>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
     </div>
 
     @if(session('success'))
